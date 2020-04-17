@@ -1,5 +1,6 @@
 {
-  "name": "accrittercalendar",
+  "name": "acvillagertrend",
+  "homepage": "https://nubleh.github.io/acvillagertrend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
