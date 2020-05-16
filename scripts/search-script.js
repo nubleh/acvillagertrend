@@ -42,13 +42,13 @@
   };
   // fetch("https://discord.com/api/v6/guilds/494376688256548865/messages/search?channel_id=669696796024504341&content=pietro", options);
 
-  const now = new Date();
+  const now = new Date('2020/05/14');
   const dateToday = new Date(`${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()}`);
 
   runForDay(dateToday);
 
   function runForDay(day){
-    if (day <= mar20Date || day <= (new Date('2020/05/08'))) {
+    if (day <= mar20Date) {
       console.log('reached march20');
       return;
     }
@@ -103,7 +103,7 @@
   }
 
   function names() {
-    return ['raymond', 'judy', 'marshal'];
+    // return ['raymond', 'judy', 'marshal'];
     return ["admiral","angus","apollo","avery","boris","boyd","bruce","butch","buzz","camofrog","cesar","chief","chow","croque","curt","cyd","cyrano","del","dobie","elvis","fang","frank","gaston","gonzo","grizzly","groucho","gruff","hamphrey","harry","hopper","ike","kabuki","knox","limberg","lobo","monty","murphy","octavian","peewee","rasher","ricky","rizzo","rocco","rolf","rooney","roscoe","spike","static","t-bone","tom","vic","vladimir","walt","wart jr.","wolfgang","antonio","axel","bam","biff","bill","billy","boone","boots","buck","bud","coach","cobb","cousteau","curly","dom","drift","flip","frobert","genji","goose","hamlet","iggly","jay","jitters","kevin","kid cat","kody","leonardo","louie","lyman","mac","moose","mott","peck","pierce","poncho","ribbot","roald","rod","rory","rowan","rudy","samson","scoot","sheldon","sly","snake","sparro","sprocket","sterling","stinky","tad","tank","teddy","tybalt","al","alfonso","anchovy","barold","beau","benedict","benjamin","big top","biskit","bob","bones","boomer","broccolo","chester","claude","clay","clyde","cole","cranston","cube","deli","derwin","dizzy","doc","drago","drake","egbert","elmer","erik","filbert","hopkins","hornsby","hugh","jacob","jeremiah","joey","lucky","marcel","moe","nate","ozzie","paolo","papi","prince","puck","pudge","punchy","raddle","rex","rodeo","sherb","simon","spork","stitches","stu","tucker","wade","walker","weber","zucker","alice","annalisa","aurora","ava","bea","bertha","bettina","cally","caroline","carrie","celia","chevre","coco","daisy","deena","dora","ellie","eunice","fauna","flurry","gala","gayle","gladys","goldie","jambette","june","kiki","kitt","lily","lolly","lucy","maggie","maple","marcie","margie","marina","megan","melba","merengue","midge","mitzi","molly","nan","nana","norma","olive","peaches","pekoe","poppy","rhonda","sally","sandy","savannah","skye","stella","sydney","sylvana","tia","vesta","agent s","anabelle","anicotti","apple","audie","bangle","bella","bianca","bluebear","bonbon","bubbles","bunnie","candi","carmen","cheri","chrissy","cookie","dotty","felicity","flora","freckles","gabi","ketchup","maddie","merry","nibbles","pango","pate","patty","peanut","peggy","penelope","pinky","piper","pippy","pompom","puddles","rosie","ruby","sprinkle","tabby","tammi","tangy","truffles","tutu","twiggy","victoria","wendy","winnie","beardo","chadder","chops","colton","curlos","ed","eugene","graham","hans","henry","hippeux","huck","jacques","julian","keaton","ken","kidd","klaus","kyle","leopold","lionel","lopez","lucha","marshal","o'hare","olaf","phil","pietro","quillson","raymond","rodney","shep","tex","zell","alli","amelia","ankha","annalise","astrid","baabara","becky","bitty","blaire","blanche","bree","broffina","cashmere","claudia","cleo","diana","elise","eloise","francine","freya","friga","gigi","gloria","greta","gwen","judy","julia","kitty","maelle","mallary","mathilda","mint","miranda","monique","naomi","olivia","opal","pancetti","pecan","portia","purrl","queenie","robin","snooty","soleil","tasha","tiffany","timbra","tipper","velma","violet","vivian","whitney","willow","yuka","agnes","canberra","charlise","cherry","deirdre","diva","flo","frita","fuchsia","hazel","katt","mira","muffy","pashmina","paula","phoebe","plucky","reneigh","renée","rocket","shari","sylvia","tammy","ursala"];
   };
 
