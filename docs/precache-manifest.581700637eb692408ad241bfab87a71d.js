@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "79d41d10dfe6a8784d18367d97270a96",
+    "revision": "d6544c776b56f211e909c5b72e0c99f8",
     "url": "/acvillagertrend/index.html"
   },
   {
-    "revision": "7fa406f07076043faa03",
+    "revision": "5a49be19b1f2b874b1b6",
     "url": "/acvillagertrend/static/css/main.5ecd60fb.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/acvillagertrend/static/js/2.44607844.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "7fa406f07076043faa03",
-    "url": "/acvillagertrend/static/js/main.7e8148b1.chunk.js"
+    "revision": "5a49be19b1f2b874b1b6",
+    "url": "/acvillagertrend/static/js/main.2ea7f3cf.chunk.js"
   },
   {
     "revision": "f1b11987a2b58237bba3",
