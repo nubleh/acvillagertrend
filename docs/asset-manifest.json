@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/acvillagertrend/static/css/main.5ecd60fb.chunk.css",
+    "main.js": "/acvillagertrend/static/js/main.01750961.chunk.js",
+    "main.js.map": "/acvillagertrend/static/js/main.01750961.chunk.js.map",
+    "runtime-main.js": "/acvillagertrend/static/js/runtime-main.7302699d.js",
+    "runtime-main.js.map": "/acvillagertrend/static/js/runtime-main.7302699d.js.map",
+    "static/js/2.44607844.chunk.js": "/acvillagertrend/static/js/2.44607844.chunk.js",
+    "static/js/2.44607844.chunk.js.map": "/acvillagertrend/static/js/2.44607844.chunk.js.map",
+    "index.html": "/acvillagertrend/index.html",
+    "precache-manifest.5513c4b5f1c4ed0fa261faa08eb61e17.js": "/acvillagertrend/precache-manifest.5513c4b5f1c4ed0fa261faa08eb61e17.js",
+    "service-worker.js": "/acvillagertrend/service-worker.js",
+    "static/css/main.5ecd60fb.chunk.css.map": "/acvillagertrend/static/css/main.5ecd60fb.chunk.css.map",
+    "static/js/2.44607844.chunk.js.LICENSE.txt": "/acvillagertrend/static/js/2.44607844.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.7302699d.js",
+    "static/js/2.44607844.chunk.js",
+    "static/css/main.5ecd60fb.chunk.css",
+    "static/js/main.01750961.chunk.js"
+  ]
+}
