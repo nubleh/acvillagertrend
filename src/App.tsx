@@ -110,6 +110,7 @@ function App() {
               transform: `
                 translateY(${chartRowHeight + sortIndex * chartRowHeight}px)
                 translateX(${shiftPercent}%)
+                translateX(${chartRowHeight / 2}px)
               `,
             }}
             farRight={shiftPercent > 80}
