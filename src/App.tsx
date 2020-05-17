@@ -78,12 +78,12 @@ function App() {
     checkDate(todayDate);
   }, []);
 
+  const sortedDataSets = dataSets.sort((a, b) => {
+    return a.date > b.date ? 1 : -1;
+  });
   const visibleDataset = useMemo(() => {
-    const sortedDataSets = dataSets.sort((a, b) => {
-      return a.date > b.date ? 1 : -1;
-    });
     return sortedDataSets[viewIndex];
-  }, [viewIndex, dataSets]);
+  }, [viewIndex, sortedDataSets]);
   const sortedVillagerNames = useMemo(() => {
     if (!visibleDataset) {
       return [];
@@ -127,7 +127,27 @@ function App() {
         <button onClick={() => { changeViewIndex(Math.min(dataSets.length - 1, viewIndex + 1)); }}>next</button>
         {viewIndex < dataSets.length - 2 && <button onClick={() => { changeViewIndex(dataSets.length - 1); }}>last</button>}
         <button onClick={() => { changeViewIndex(Math.min(dataSets.length - 1, viewIndex + 1), true); }}>{autoRun ? 'stop' : 'play'}</button>
-        <div style={{ textAlign: 'center' }}>{visibleDataset && visibleDataset.date.toDateString()}</div>
+        <DatePrint style={{ textAlign: 'center' }}>
+          {visibleDataset && visibleDataset.date.toDateString()}
+        </DatePrint>
+        <DateSlider>
+          {sortedDataSets.map((ds, dsIndex) => {
+            const date = ds.date;
+            return <div
+              key={dsIndex}
+            >
+              <DatePopup>
+                {`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`}
+              </DatePopup>
+              <DateBead
+                onClick={() => {
+                  setViewIndex(dsIndex);
+                }}
+                active={dsIndex === viewIndex}
+              />
+            </div>
+          })}
+        </DateSlider>
       </ControlPanel>
       {!isLoading && <ChartContainer style={{
         height: chartRowHeight * (sortedVillagerNames.length + 1),
@@ -203,7 +223,7 @@ const MainContainer = styled.div`
 const ControlPanel = styled.div`
   position: fixed;
   right: 10px;
-  bottom: 10px;
+  bottom: 40px;
   z-index: 1;
   background: rgba(255, 255, 255, 0.8);
   padding: 10px;
@@ -285,6 +305,81 @@ const BarLine = styled.div`
   right: 100%;
   transition: background ${transitionDur}s;
   opacity: 0.5;
+`;
+
+const DatePrint = styled.div`
+  font-size: 20px;
+`;
+
+const timelineColor = '#88d';
+
+const DatePopup = styled.div`
+  position: absolute;
+  top: 0;
+  left: 50%;
+  padding: 2px 4px;
+  background: rgba(255, 255, 255, 0.9);
+  border: solid 2px ${timelineColor};
+  border-radius: 4px;
+  font-size: 10px;
+  transition: transform 0.2s;
+  transform: translateX(-50%) translateY(-110%) scale(0);
+`;
+
+const DateSlider = styled.div`
+  display: flex;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  max-width: 90vw;
+
+  &::before {
+    content: '';
+    display: block;
+    z-index: 0;
+    width: 100%;
+    height: 2px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    box-sizing: border-box;
+    border: solid 2px transparent;
+    border-color: ${timelineColor} transparent;
+    border-width: 1px 5px;
+  }
+
+  > div {
+    position: relative;
+    z-index: 1;
+
+    &:hover {
+      ${DatePopup} {
+        transform: translateX(-50%) translateY(-110%);
+      }
+    }
+  }
+`;
+
+interface DateBeadProps {
+  active?: boolean;
+}
+const DateBead = styled.div<DateBeadProps>`
+  width: 8px;
+  height: 8px;
+  border-radius: 8px;
+  background: #fff;
+  box-sizing: border-box;
+  border: solid 2px ${timelineColor};
+  margin: 0 1px;
+  cursor: pointer;
+
+  &:hover {
+    background: #aac;
+  }
+
+  ${({ active }) => active && css`
+    background: ${timelineColor};
+  `}
 `;
 
 export default App;
