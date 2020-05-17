@@ -243,7 +243,7 @@ const ChartRow = styled.div<ChartRowProps>`
 
 const BarLine = styled.div`
   height: 5px;
-  width: 100%;
+  width: 110%;
   background: #c00;
   position: absolute;
   top: 50%;
