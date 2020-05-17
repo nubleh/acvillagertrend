@@ -87,8 +87,10 @@ function App() {
           right: 0,
           whiteSpace: 'nowrap',
         }}>loading... {dataSets.length} data files</div>}
+        {viewIndex > 1 && <button onClick={() => { changeViewIndex(0); }}>first</button>}
         <button onClick={() => { changeViewIndex(Math.max(0, viewIndex - 1)); }}>prev</button>
         <button onClick={() => { changeViewIndex(Math.min(dataSets.length - 1, viewIndex + 1)); }}>next</button>
+        {viewIndex < dataSets.length - 2 && <button onClick={() => { changeViewIndex(dataSets.length - 1); }}>last</button>}
         <button onClick={() => { changeViewIndex(Math.min(dataSets.length - 1, viewIndex + 1), true); }}>{autoRun ? 'stop' : 'play'}</button>
         <div style={{ textAlign: 'center' }}>{visibleDataset && visibleDataset.date.toDateString()}</div>
       </ControlPanel>
