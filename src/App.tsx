@@ -62,8 +62,12 @@ function App() {
     return thisSortedVillagerNames
   }, [visibleDataset]);
 
-  const changeViewIndex = (newViewIndex: number) => {
-    if (newViewIndex > viewIndex) {
+  const changeViewIndex = (newViewIndex: number, autoplay?: boolean) => {
+    if (autoRun && autoplay) {
+      setAutoRun(false);
+      return;
+    }
+    if (newViewIndex > viewIndex && autoplay) {
       setAutoRun(true);
     } else {
       setAutoRun(false);
@@ -85,6 +89,7 @@ function App() {
         }}>loading... {dataSets.length} data files</div>}
         <button onClick={() => { changeViewIndex(Math.max(0, viewIndex - 1)); }}>prev</button>
         <button onClick={() => { changeViewIndex(Math.min(dataSets.length - 1, viewIndex + 1)); }}>next</button>
+        <button onClick={() => { changeViewIndex(Math.min(dataSets.length - 1, viewIndex + 1), true); }}>{autoRun ? 'stop' : 'play'}</button>
         <div style={{ textAlign: 'center' }}>{visibleDataset && visibleDataset.date.toDateString()}</div>
       </ControlPanel>
       {!isLoading && <ChartContainer style={{
