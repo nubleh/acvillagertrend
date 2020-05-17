@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
+import styled, { css } from 'styled-components';
 
 import villagersData from './data/villagers.json';
 type VillagerName = keyof typeof villagersData;
@@ -53,28 +53,34 @@ function App() {
       return [];
     }
     const thisSortedVillagerNames = Object.entries(visibleDataset.data).sort((a, b) => {
+      if (a[1] === b[1]) {
+        return a[0] > b[0] ? 1 : -1;
+      }
       return a[1] > b[1] ? -1 : 1;
     }).map(i => i[0]);
     return thisSortedVillagerNames
   }, [visibleDataset]);
 
+  const changeViewIndex = (newViewIndex: number) => {
+    setViewIndex(newViewIndex);
+  };
+
   const highestCount = visibleDataset?.data[sortedVillagerNames?.[0]] || 1;
   const highestScale = 50 + (50 * (viewIndex + 1) / dataSets.length);
   return (
     <MainContainer>
-      <div style={{
-        background: 'white',
-        position: 'fixed',
-        top: 0,
-        zIndex: 1,
-      }}>
-        {isLoading && <>loading...</>}
-        {viewIndex + 1}/{dataSets.length} items
-        <button onClick={() => { setViewIndex(Math.max(0, viewIndex - 1)); }}>prev</button>
-        <button onClick={() => { setViewIndex(Math.min(dataSets.length - 1, viewIndex + 1)); }}>next</button>
+      <ControlPanel>
+        {isLoading && <div style={{
+          position: 'absolute',
+          bottom: '100%',
+          right: 0,
+          whiteSpace: 'nowrap',
+        }}>loading... {dataSets.length} data files</div>}
+        <button onClick={() => { changeViewIndex(Math.max(0, viewIndex - 1)); }}>prev</button>
+        <button onClick={() => { changeViewIndex(Math.min(dataSets.length - 1, viewIndex + 1)); }}>next</button>
         <div style={{ textAlign: 'center' }}>{visibleDataset && visibleDataset.date.toDateString()}</div>
-      </div>
-      <ChartContainer style={{
+      </ControlPanel>
+      {!isLoading && <ChartContainer style={{
         height: chartRowHeight * sortedVillagerNames.length,
       }}>
         {visibleDataset && Object.entries(visibleDataset.data).map(([key, value]) => {
@@ -83,19 +89,38 @@ function App() {
             return null;
           }
           const sortIndex = sortedVillagerNames.indexOf(key);
+          const shiftPercent = value / highestCount * highestScale;
           return <ChartRow
             key={key}
             style={{
               transform: `
                 translateY(${sortIndex * chartRowHeight}px)
-                translateX(${value / highestCount * highestScale}%)
+                translateX(${shiftPercent}%)
               `,
             }}
+            farRight={shiftPercent > 80}
           >
+            <BarLine
+              style={{
+                background: `rgb(
+                  ${value/highestCount*255},
+                  ${255 - value/highestCount*255},
+                  0
+                )`,
+              }}
+            />
             <VillagerBar>
-              {vData.name}
               <div>
-                {value}
+                {sortIndex + 1}.
+              </div>
+              <div>
+                <div>
+                  {sortIndex === 0 && vData.name === 'Raymond' && 'Fucking '}
+                  {vData.name}
+                </div>
+                <div>
+                  {value}
+                </div>
               </div>
             </VillagerBar>
             <VillagerIcon
@@ -105,7 +130,7 @@ function App() {
             />
           </ChartRow>;
         })}
-      </ChartContainer>
+      </ChartContainer>}
     </MainContainer>
   );
 }
@@ -113,15 +138,68 @@ function App() {
 const MainContainer = styled.div`
   font-family: sans-serif;
   font-size: 12px;
+  width: 90vw;
+  overflow: hidden;
+`;
+
+const ControlPanel = styled.div`
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 10px;
 `;
 
 const ChartContainer = styled.div`
   position: relative;
   margin: 20px;
+  overflow: hidden;
 `;
 
 const transitionDur = 1;
-const ChartRow = styled.div`
+const VillagerBar = styled.div`
+  font-size: 10px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) translateX(${chartRowHeight / 2}px);
+  display: flex;
+  left: 0;
+  transition: transform ${transitionDur}s;
+
+  > div {
+    padding-right: 4px;
+  }
+`;
+
+interface VillagerIconProps {
+  back?: boolean;
+}
+const VillagerIcon = styled.div<VillagerIconProps>`
+  display: inline-block;
+  vertical-align: middle;
+  width: ${chartRowHeight}px;
+  height: ${chartRowHeight}px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-repeat: no-repeat;
+  background-position: center left;
+  background-size: contain;
+  transform: translateX(-50%);
+
+  ${({ back }) => back && css`
+    width: ${chartRowHeight + 10}px;
+    height: ${chartRowHeight + 10}px;
+    transform: translateX(-50%) translateY(-5px);
+    filter: invert(1);
+  `}
+`;
+
+interface ChartRowProps {
+  farRight: boolean;
+}
+const ChartRow = styled.div<ChartRowProps>`
   height: ${chartRowHeight}px;
   position: absolute;
   top: 0;
@@ -132,26 +210,22 @@ const ChartRow = styled.div`
   span {
     vertical-align: middle;
   }
+
+  ${({ farRight }) => farRight && css`
+    ${VillagerBar} {
+      transform: translateY(-50%) translateX(-100%) translateX(${-chartRowHeight / 2}px);
+    }
+  `}
 `;
 
-const VillagerBar = styled.div`
-  font-size: 10px;
+const BarLine = styled.div`
+  height: 5px;
+  width: 100%;
+  background: #c00;
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
-`;
-
-const VillagerIcon = styled.div`
-  display: inline-block;
-  vertical-align: middle;
-  width: ${chartRowHeight}px;
-  height: ${chartRowHeight}px;
-  position: absolute;
-  top: 0;
   right: 100%;
-  background-repeat: no-repeat;
-  background-position: center left;
-  background-size: contain;
+  transition: background ${transitionDur}s;
 `;
 
 export default App;
