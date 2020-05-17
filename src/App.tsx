@@ -175,6 +175,8 @@ function App() {
                 autoMoveTimeout.current = setTimeout(() => {
                   setViewIndex(viewIndex + 1);
                 }, 50);
+              } else {
+                setAutoRun(false);
               }
             } : undefined}
           >
