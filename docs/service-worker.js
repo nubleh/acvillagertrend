@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/acvillagertrend/precache-manifest.581700637eb692408ad241bfab87a71d.js"
+  "/acvillagertrend/precache-manifest.8f9a2f629a4a504e41313932b6969ea6.js"
 );
 
 self.addEventListener('message', (event) => {
