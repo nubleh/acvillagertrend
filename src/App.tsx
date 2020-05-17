@@ -19,6 +19,7 @@ function App() {
   const [dataSets, setDataSets] = useState([] as DataSet[]);
   const [isLoading, setIsLoading] = useState(true);
   const [viewIndex, setViewIndex] = useState(0);
+  const [autoRun, setAutoRun] = useState(false);
 
   useEffect(() => {
     const getForDate = (date: Date) => {
@@ -62,11 +63,17 @@ function App() {
   }, [visibleDataset]);
 
   const changeViewIndex = (newViewIndex: number) => {
+    if (newViewIndex > viewIndex) {
+      setAutoRun(true);
+    } else {
+      setAutoRun(false);
+    }
     setViewIndex(newViewIndex);
   };
 
   const highestCount = visibleDataset?.data[sortedVillagerNames?.[0]] || 1;
   const highestScale = 50 + (50 * (viewIndex + 1) / dataSets.length);
+  const autoMoveTimeout = useRef(0);
   return (
     <MainContainer>
       <ControlPanel>
@@ -81,9 +88,9 @@ function App() {
         <div style={{ textAlign: 'center' }}>{visibleDataset && visibleDataset.date.toDateString()}</div>
       </ControlPanel>
       {!isLoading && <ChartContainer style={{
-        height: chartRowHeight * sortedVillagerNames.length,
+        height: chartRowHeight * (sortedVillagerNames.length + 1),
       }}>
-        {visibleDataset && Object.entries(visibleDataset.data).map(([key, value]) => {
+        {visibleDataset && Object.entries(visibleDataset.data).map(([key, value], itemIndex) => {
           const vData = villagersData[key as VillagerName];
           if (!vData) {
             return null;
@@ -94,11 +101,19 @@ function App() {
             key={key}
             style={{
               transform: `
-                translateY(${sortIndex * chartRowHeight}px)
+                translateY(${chartRowHeight + sortIndex * chartRowHeight}px)
                 translateX(${shiftPercent}%)
               `,
             }}
             farRight={shiftPercent > 80}
+            onTransitionEnd={itemIndex === 0 ? () => {
+              if (autoRun && viewIndex < dataSets.length - 1) {
+                clearTimeout(autoMoveTimeout.current);
+                autoMoveTimeout.current = setTimeout(() => {
+                  setViewIndex(viewIndex + 1);
+                }, 50);
+              }
+            } : undefined}
           >
             <BarLine
               style={{
@@ -213,7 +228,7 @@ const ChartRow = styled.div<ChartRowProps>`
 
   ${({ farRight }) => farRight && css`
     ${VillagerBar} {
-      transform: translateY(-50%) translateX(-100%) translateX(${-chartRowHeight / 2}px);
+      transform: translateY(-100%) translateX(-100%) translateX(${-chartRowHeight / 2}px);
     }
   `}
 `;
@@ -226,6 +241,7 @@ const BarLine = styled.div`
   top: 50%;
   right: 100%;
   transition: background ${transitionDur}s;
+  opacity: 0.5;
 `;
 
 export default App;
