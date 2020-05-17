@@ -22,32 +22,67 @@ function App() {
   const [autoRun, setAutoRun] = useState(false);
 
   useEffect(() => {
-    const getForDate = (date: Date) => {
+    const now = new Date();
+    const todayDate = new Date(`${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}`);
+    const checkDate = (date: Date) => {
       const fileName = `${date.getFullYear()}_${date.getMonth() + 1}_${date.getDate()}`;
       const filePath = `${process.env.PUBLIC_URL}/data/${fileName}.json`;
-      fetch(filePath).then(r => r.json()).then(j => {
-        const nextDate = new Date(date);
-        nextDate.setDate(nextDate.getDate() + 1);
-        getForDate(nextDate);
-
-        setDataSets((prev) => {
-          return [
-            ...prev,
-            {
-              date,
-              data: j as Data,
-            },
-          ];
+      fetch(filePath).then(r => r.json()).then(() => {
+        const datesToFetch = [] as Array<{
+          date: Date,
+          path: string,
+        }>;
+        const pivotDate = new Date(date);
+        while(pivotDate >= firstDate) {
+          const pivotDateDataPath = `${process.env.PUBLIC_URL}/data/${pivotDate.getFullYear()}_${pivotDate.getMonth() + 1}_${pivotDate.getDate()}.json`;
+          datesToFetch.push({
+            path: pivotDateDataPath,
+            date: new Date(pivotDate),
+          });
+          pivotDate.setDate(pivotDate.getDate() - 1);
+        }
+        let resolvedCount = 0;
+        const incrementResolution = () => {
+          resolvedCount += 1;
+          if (resolvedCount >= datesToFetch.length) {
+            setIsLoading(false);
+          }
+        };
+        Promise.all(datesToFetch.map(dateItem => {
+          return fetch(dateItem.path);
+        })).then(responses => {
+          responses.forEach((r, rIndex) => {
+            r.json().then(j => {
+              incrementResolution();
+              setDataSets((prevDataSets) => {
+                return [
+                  ...prevDataSets,
+                  {
+                    date: datesToFetch[rIndex].date,
+                    data: j,
+                  },
+                ];
+              });
+            }).catch(() => {
+              incrementResolution();
+              console.log(r.url + ' failed');
+            });
+          });
         });
-      }).catch(e => {
-        setIsLoading(false);
+      }).catch(() => {
+        const prevDate = new Date(date);
+        prevDate.setDate(prevDate.getDate() - 1);
+        checkDate(prevDate);
       });
     };
-    getForDate(firstDate);
+    checkDate(todayDate);
   }, []);
 
   const visibleDataset = useMemo(() => {
-    return dataSets[viewIndex];
+    const sortedDataSets = dataSets.sort((a, b) => {
+      return a.date > b.date ? 1 : -1;
+    });
+    return sortedDataSets[viewIndex];
   }, [viewIndex, dataSets]);
   const sortedVillagerNames = useMemo(() => {
     if (!visibleDataset) {
