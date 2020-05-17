@@ -238,6 +238,7 @@ const ChartContainer = styled.div`
 `;
 
 const transitionDur = 1;
+const transitionDelay = 0.25;
 const VillagerBar = styled.div`
   font-size: 10px;
   position: absolute;
@@ -246,6 +247,7 @@ const VillagerBar = styled.div`
   display: flex;
   left: 0;
   transition: transform ${transitionDur}s;
+  transition-delay: ${transitionDelay}s;
 
   > div {
     padding-right: 4px;
@@ -286,6 +288,7 @@ const ChartRow = styled.div<ChartRowProps>`
   left: 0;
   width: 95%;
   transition: transform ${transitionDur}s;
+  transition-delay: ${transitionDelay}s;
 
   span {
     vertical-align: middle;
@@ -306,6 +309,7 @@ const BarLine = styled.div`
   top: 50%;
   right: 100%;
   transition: background ${transitionDur}s;
+  transition-delay: ${transitionDelay}s;
   opacity: 0.5;
 `;
 
